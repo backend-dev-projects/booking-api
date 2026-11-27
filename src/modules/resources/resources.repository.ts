@@ -15,7 +15,7 @@ export interface Resource {
   floor: number | null;
 }
 
-export class ResourceRepository {
+export class ResourcesRepository {
   constructor(private readonly db: DbClient = database) {}
 
   async filter(filter: ResourceFilters): Promise<Resource[]> {
@@ -85,7 +85,7 @@ export class ResourceRepository {
     );
   }
 
-  async update(resource_id: string, resource: ResourceUpdateBody) {
+  async update(resource_id: number, resource: ResourceUpdateBody) {
     await this.db.query(
       `
     UPDATE resources
@@ -107,7 +107,7 @@ export class ResourceRepository {
     );
   }
 
-  async delete(resource_id: string) {
+  async delete(resource_id: number) {
     await this.db.query(
       `
     DELETE FROM resources WHERE id=$1

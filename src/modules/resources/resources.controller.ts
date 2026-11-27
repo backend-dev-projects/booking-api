@@ -9,16 +9,19 @@ import { updateResourceRequestSchema } from "./schemas/update-resource.schema.js
 import { resourceDeleteErrors } from "./errors/resource-delete.error.js";
 import { deleteResourceRequestSchema } from "./schemas/delete-resource.schema.js";
 import { loadResource } from "./middlewares/load-resource.middleware.js";
-import { ResourceRepository } from "./resources.repository.js";
 import { HttpError } from "../../shared/http/errors/http-error.js";
+import { ResourcesService } from "./resources.service.js";
 
 export class ResourcesController {
-  private readonly resourceRepository = new ResourceRepository();
+  constructor(private readonly resourcesService = new ResourcesService()) {}
 
   @UseMiddleware(validateRequest(listResourcesRequestSchema))
   async listResources(_req: Request, res: Response): Promise<void> {
-    const resources = await this.resourceRepository.findAll(
-      res.locals.input.query,
+    const { resource_type_id, capacity } = res.locals.input.query;
+
+    const resources = await this.resourcesService.findAll(
+      resource_type_id,
+      capacity,
     );
 
     res.json(resources);
@@ -26,21 +29,7 @@ export class ResourcesController {
 
   @UseMiddleware(validateRequest(createResourcesRequestSchema))
   async createResource(_req: Request, res: Response): Promise<void> {
-    try {
-      await this.resourceRepository.insert(res.locals.input.body);
-    } catch (error: unknown) {
-      const response = lookupConstraintError(error, resourceWriteErrors);
-
-      if (!response) {
-        throw error;
-      }
-
-      throw new HttpError(
-        response.status,
-        response.issues[0]!.message,
-        response.issues[0]!.path,
-      );
-    }
+    this.resourcesService.insert(res.locals.input.body);
 
     res.status(201).end();
   }
@@ -49,21 +38,7 @@ export class ResourcesController {
   async updateResource(_req: Request, res: Response): Promise<void> {
     const { resource_id: resource_id } = res.locals.input.params;
 
-    try {
-      await this.resourceRepository.update(resource_id, res.locals.input.body);
-    } catch (error: unknown) {
-      const response = lookupConstraintError(error, resourceWriteErrors);
-
-      if (!response) {
-        throw error;
-      }
-
-      throw new HttpError(
-        response.status,
-        response.issues[0]!.message,
-        response.issues[0]!.path,
-      );
-    }
+    await this.resourcesService.update(resource_id, res.locals.input.body);
 
     res.status(204).end();
   }
@@ -72,21 +47,7 @@ export class ResourcesController {
   async deleteResource(_req: Request, res: Response): Promise<void> {
     const { resource_id } = res.locals.input.params;
 
-    try {
-      await this.resourceRepository.delete(resource_id);
-    } catch (error: unknown) {
-      const response = lookupConstraintError(error, resourceDeleteErrors);
-
-      if (!response) {
-        throw error;
-      }
-
-      throw new HttpError(
-        response.status,
-        response.issues[0]!.message,
-        response.issues[0]!.path,
-      );
-    }
+    await this.resourcesService.delete(resource_id);
 
     res.status(204).end();
   }

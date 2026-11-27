@@ -1,6 +1,7 @@
 import { CustomerRepository, type Customer } from "./customers.repository.js";
 import { lookupConstraintError } from "../../db/postgres/errors.js";
 import { customerWriteErrors } from "./errors/customer-write.error.js";
+import { customerDeleteErrors } from "./errors/customer-delete.error.js";
 import { HttpError } from "../../shared/http/errors/http-error.js";
 
 export class CustomersService {
@@ -70,7 +71,7 @@ export class CustomersService {
     try {
       await this.customerRepository.delete(id_customer);
     } catch (error: unknown) {
-      const response = lookupConstraintError(error, customerWriteErrors);
+      const response = lookupConstraintError(error, customerDeleteErrors);
 
       if (!response) {
         throw error;
