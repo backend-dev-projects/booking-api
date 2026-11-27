@@ -9,7 +9,6 @@ import {
   sessionCookieOptions,
 } from "./middlewares/session.middleware.js";
 import { loginRequestSchema, type LoginBody } from "./schemas/login.schema.js";
-import { randomBytes } from "node:crypto";
 import { AuthService } from "./auth.service.js";
 
 export class AuthController {
@@ -18,11 +17,14 @@ export class AuthController {
   @UseMiddleware(validateRequest(loginRequestSchema))
   async login(req: Request, res: Response): Promise<void> {
     const { email, password }: LoginBody = res.locals.input.body;
+
     const user = await this.authService.login(email, password);
 
     await promisify(req.session.regenerate).call(req.session);
+
     req.session.userId = user.id;
     req.session.role = user.role;
+
     await promisify(req.session.save).call(req.session);
 
     res.status(204).end();

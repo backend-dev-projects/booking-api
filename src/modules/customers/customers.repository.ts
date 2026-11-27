@@ -1,7 +1,7 @@
 import type { DbClient } from "../../db/db-client.js";
 import { database } from "../../db/index.js";
 
-interface Customer {
+export interface Customer {
   id: string;
   full_name: string;
   email: string;
