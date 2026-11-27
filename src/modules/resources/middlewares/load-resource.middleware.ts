@@ -1,8 +1,8 @@
 import type { RequestHandler } from "express";
-import { ResourceRepository } from "../resources.repository.js";
+import { ResourcesRepository } from "../resources.repository.js";
 import { HttpError } from "../../../shared/http/errors/http-error.js";
 
-const resourceRepository = new ResourceRepository();
+const resourceRepository = new ResourcesRepository();
 
 export const loadResource: RequestHandler = async (req, res) => {
   const resourceId = req.params.id?.toString() ?? "";

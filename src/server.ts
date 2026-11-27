@@ -5,7 +5,7 @@ import {
   customersRouter,
   publicCustomersRouter,
 } from "./modules/customers/customers.routes.js";
-import { reservationsRouter } from "./modules/reservations/reservation.routes.js";
+import { reservationsRouter } from "./modules/reservations/reservations.routes.js";
 
 import {
   authRouter,

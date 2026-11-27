@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { UseMiddleware } from "../../shared/http/routing/registers.routing.js";
 import { validateRequest } from "../../shared/http/middleware/validate-request.middleware.js";
 import { reservationCreateRequestSchema } from "./schemas/create-reservation.schema.js";
-import { ReservationService } from "./reservation.service.js";
+import { ReservationService } from "./reservations.service.js";
 
 export class ReservationController {
   constructor(
@@ -18,9 +18,9 @@ export class ReservationController {
     await this.reservationService.create({
       user_id,
       resource_id,
-      requested_capacity,
-      requested_start,
-      requested_end,
+      reserved_capacity: requested_capacity,
+      start_time: requested_start,
+      end_time: requested_end,
     });
 
     res.status(201).end();

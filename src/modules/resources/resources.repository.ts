@@ -1,19 +1,9 @@
 import type { DbClient } from "../../db/db-client.js";
 import { database } from "../../db/index.js";
-import type { BookingMode } from "./enums/booking-mode.enum.js";
+import type { Resource } from "./resources.types.js";
 import type { ResourceCreateBody } from "./schemas/create-resource.schema.js";
 import type { ResourceFilters } from "./schemas/list-resources.schema.js";
 import type { ResourceUpdateBody } from "./schemas/update-resource.schema.js";
-
-export interface Resource {
-  id: string;
-  resource_type_id: string;
-  booking_mode: BookingMode;
-  name: string;
-  capacity: number;
-  description: string | null;
-  floor: number | null;
-}
 
 export class ResourcesRepository {
   constructor(private readonly db: DbClient = database) {}

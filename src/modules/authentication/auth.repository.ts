@@ -1,12 +1,6 @@
 import type { DbClient } from "../../db/db-client.js";
 import { database } from "../../db/index.js";
-import type { Role } from "./enums/roles.enum.js";
-
-export interface UserCredentials {
-  id: string;
-  password_hash: string;
-  role: Role;
-}
+import type { UserCredentials } from "./auth.types.js";
 
 export class AuthRepository {
   constructor(private readonly db: DbClient = database) {}

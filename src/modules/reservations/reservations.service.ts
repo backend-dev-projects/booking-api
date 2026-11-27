@@ -1,66 +1,46 @@
 import { database } from "../../db/index.js";
 import type { Database } from "../../db/db-client.js";
-import {
-  ResourceRepository,
-  type Resource,
-} from "../resources/resources.repository.js";
-import { ReservationRepository } from "./reservation.repository.js";
 import { HttpError } from "../../shared/http/errors/http-error.js";
 import { BookingMode } from "../resources/enums/booking-mode.enum.js";
 import { findPeakOccupancy } from "./availability/find-peak-occupancy.js";
-
-export interface CreateReservationInput {
-  user_id: string;
-  resource_id: number;
-  requested_capacity: number | null;
-  requested_start: Date;
-  requested_end: Date;
-}
+import { ReservationsRepository } from "./reservations.repository.js";
+import { ResourcesRepository } from "../resources/resources.repository.js";
+import type { Resource } from "../resources/resources.types.js";
+import type { Reservation } from "./reservations.types.js";
 
 export class ReservationService {
   constructor(
     private readonly db: Database = database,
-    private readonly reservationRepository: ReservationRepository = new ReservationRepository(),
+    private readonly reservationRepository: ReservationsRepository = new ReservationsRepository(),
   ) {}
 
-  async create(input: CreateReservationInput) {
-    const {
-      user_id,
-      resource_id,
-      requested_capacity,
-      requested_start,
-      requested_end,
-    } = input;
-
+  async create(reservation: Reservation) {
     await this.db.withTransaction(async (tx) => {
-      const resourceRepository = new ResourceRepository(tx);
-      const reservationRepository = new ReservationRepository(tx);
+      const resourceRepository = new ResourcesRepository(tx);
+      const reservationRepository = new ReservationsRepository(tx);
 
-      const resource = await resourceRepository.findForUpdate(resource_id);
+      const resource = await resourceRepository.findForUpdate(
+        reservation.resource_id,
+      );
 
       this.validateResource(resource);
 
-      this.validateRequestedCapacity(resource, requested_capacity);
+      this.validateRequestedCapacity(resource, reservation.reserved_capacity);
 
       await this.validateAvailability(
-        resource_id,
-        requested_start,
-        requested_end,
-        requested_capacity!,
+        reservation.resource_id,
+        reservation.start_time,
+        reservation.end_time,
+        reservation.reserved_capacity,
         resource,
       );
 
-      await reservationRepository.insert({
-        id: "",
-        user_id,
-        resource_id,
-        reserved_capacity: this.getReservedCapacity(
-          resource!,
-          requested_capacity!,
-        ),
-        start_time: requested_start,
-        end_time: requested_end,
-      });
+      reservation.reserved_capacity = this.getReservedCapacity(
+        resource!,
+        reservation.reserved_capacity,
+      );
+
+      await reservationRepository.insert(reservation);
     });
   }
 

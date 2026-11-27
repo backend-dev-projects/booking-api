@@ -1,16 +1,8 @@
 import type { DbClient } from "../../db/db-client.js";
 import { database } from "../../db/index.js";
+import type { Reservation } from "./reservations.types.js";
 
-export interface Reservation {
-  id: string;
-  user_id: string;
-  resource_id: number;
-  start_time: Date;
-  end_time: Date;
-  reserved_capacity: number;
-}
-
-export class ReservationRepository {
+export class ReservationsRepository {
   constructor(private readonly db: DbClient = database) {}
 
   async findByStartTime(
@@ -20,7 +12,7 @@ export class ReservationRepository {
   ): Promise<Reservation[]> {
     const result = await this.db.query<Reservation>(
       `
-      SELECT id, user_id, resource_id, start_time, end_time, reserved_capacity
+      SELECT user_id, resource_id, start_time, end_time, reserved_capacity
            FROM reservations
         WHERE   resource_id = $1 
             AND (status = 'CONFIRMED' OR status = 'PENDING')
@@ -41,7 +33,7 @@ export class ReservationRepository {
   ): Promise<Reservation[]> {
     const result = await this.db.query<Reservation>(
       `
-      SELECT id, user_id, resource_id, 
+      SELECT user_id, resource_id, 
              start_time, end_time, reserved_capacity
            FROM public.reservations
         WHERE   resource_id = $1

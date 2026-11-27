@@ -1,22 +1,6 @@
 import type { DbClient } from "../../db/db-client.js";
 import { database } from "../../db/index.js";
-
-export interface Customer {
-  id: string;
-  full_name: string;
-  email: string;
-}
-
-interface InsertCustomerInput {
-  full_name: string;
-  email: string;
-  password_hash: string;
-}
-
-interface UpdateCustomerInput {
-  full_name: string | undefined;
-  password_hash: string | undefined;
-}
+import type { Customer } from "./customers.types.js";
 
 export class CustomerRepository {
   constructor(private readonly db: DbClient = database) {}
@@ -46,19 +30,23 @@ export class CustomerRepository {
     return result.rows[0];
   }
 
-  async insert(customer: InsertCustomerInput) {
+  async insert(full_name: string, email: string, password_hash: string) {
     const result = await this.db.query(
       `
       INSERT INTO users(full_name, email, password_hash)
              VALUES ($1, $2, $3);
     `,
-      [customer.full_name, customer.email, customer.password_hash],
+      [full_name, email, password_hash],
     );
 
     return result.rows;
   }
 
-  async update(id_customer: string, customer: UpdateCustomerInput) {
+  async update(
+    id_customer: string,
+    full_name: string | undefined,
+    password_hash: string | undefined,
+  ) {
     const result = await this.db.query(
       `
       UPDATE users
@@ -66,7 +54,7 @@ export class CustomerRepository {
              password_hash = COALESCE($2, password_hash)
 	     WHERE id=$3
   `,
-      [customer.full_name, customer.password_hash, id_customer],
+      [full_name, password_hash, id_customer],
     );
 
     return result.rows;

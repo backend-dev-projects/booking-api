@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { ReservationController } from "./reservation.controller.js";
+import { ReservationController } from "./reservations.controller.js";
 import {
   Delete,
   Get,

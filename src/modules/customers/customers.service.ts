@@ -1,8 +1,9 @@
-import { CustomerRepository, type Customer } from "./customers.repository.js";
+import { CustomerRepository } from "./customers.repository.js";
 import { lookupConstraintError } from "../../db/postgres/errors.js";
 import { customerWriteErrors } from "./errors/customer-write.error.js";
 import { customerDeleteErrors } from "./errors/customer-delete.error.js";
 import { HttpError } from "../../shared/http/errors/http-error.js";
+import type { Customer } from "./customers.types.js";
 
 export class CustomersService {
   constructor(private readonly customerRepository = new CustomerRepository()) {}
@@ -26,7 +27,7 @@ export class CustomersService {
 
   async insert(full_name: string, email: string, password_hash: string) {
     try {
-      await this.customerRepository.insert({ full_name, email, password_hash });
+      await this.customerRepository.insert(full_name, email, password_hash);
     } catch (error: unknown) {
       const response = lookupConstraintError(error, customerWriteErrors);
 
@@ -48,10 +49,11 @@ export class CustomersService {
     password_hash?: string,
   ) {
     try {
-      await this.customerRepository.update(id_customer, {
+      await this.customerRepository.update(
+        id_customer,
         full_name,
         password_hash,
-      });
+      );
     } catch (error: unknown) {
       const response = lookupConstraintError(error, customerWriteErrors);
 

@@ -1,5 +1,6 @@
 import { lookupConstraintError } from "../../db/postgres/errors.js";
-import { ResourcesRepository, type Resource } from "./resources.repository.js";
+import { ResourcesRepository } from "./resources.repository.js";
+import type { Resource } from "./resources.types.js";
 import { resourceWriteErrors } from "./errors/resource-write.error.js";
 import { resourceDeleteErrors } from "./errors/resource-delete.error.js";
 import { HttpError } from "../../shared/http/errors/http-error.js";
