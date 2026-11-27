@@ -4,7 +4,7 @@ import { database } from "../../db/index.js";
 export interface Reservation {
   id: string;
   user_id: string;
-  resource_id: string;
+  resource_id: number;
   start_time: Date;
   end_time: Date;
   reserved_capacity: number;
@@ -14,7 +14,7 @@ export class ReservationRepository {
   constructor(private readonly db: DbClient = database) {}
 
   async findByStartTime(
-    resource_id: string,
+    resource_id: number,
     requested_start: Date,
     requested_end: Date,
   ): Promise<Reservation[]> {
@@ -35,7 +35,7 @@ export class ReservationRepository {
   }
 
   async findByEndTime(
-    resource_id: string,
+    resource_id: number,
     requested_start: Date,
     requested_end: Date,
   ): Promise<Reservation[]> {
