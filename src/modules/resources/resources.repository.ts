@@ -1,4 +1,6 @@
-import { pool } from "../../db/pool.js";
+import type { DbClient } from "../../db/db-client.js";
+import { database } from "../../db/index.js";
+import type { BookingMode } from "./enums/booking-mode.enum.js";
 import type { ResourceCreateBody } from "./schemas/create-resource.schema.js";
 import type { ResourceFilters } from "./schemas/list-resources.schema.js";
 import type { ResourceUpdateBody } from "./schemas/update-resource.schema.js";
@@ -6,69 +8,86 @@ import type { ResourceUpdateBody } from "./schemas/update-resource.schema.js";
 export interface Resource {
   id: string;
   resource_type_id: string;
+  booking_mode: BookingMode;
   name: string;
+  capacity: number;
   description: string | null;
   floor: number | null;
-  capacity: number;
 }
 
-export async function findAllResources(
-  filter: ResourceFilters,
-): Promise<Resource[]> {
-  const result = await pool.query<Resource>(
-    `
-    SELECT r.id, r.resource_type_id, r.name, r.description, r.floor, r.capacity
+export class ResourceRepository {
+  constructor(private readonly db: DbClient = database) {}
+
+  async filter(filter: ResourceFilters): Promise<Resource[]> {
+    const result = await this.db.query<Resource>(
+      `
+    SELECT r.id, r.resource_type_id, r.name, 
+           r.description, r.floor, r.capacity, 
+           rt.booking_mode
           FROM resources AS r
       JOIN resource_types AS rt ON rt.id = r.resource_type_id
           WHERE (rt.id = $1 OR $1 IS NULL)
            AND  (r.capacity >= $2 OR $2 IS NULL)
           ORDER BY r.id
   `,
-    [filter.resource_type_id ?? null, filter.capacity ?? null],
-  );
+      [filter.resource_type_id ?? null, filter.capacity ?? null],
+    );
 
-  return result.rows;
-}
+    return result.rows;
+  }
 
-export async function findResource(
-  id_resource: number,
-): Promise<Resource | undefined> {
-  const result = await pool.query<Resource>(
-    `
-    SELECT id, resource_type_id, name, description, floor, capacity
-          FROM resources
-        WHERE id = $1
+  async findById(resource_id: string): Promise<Resource | undefined> {
+    const result = await this.db.query<Resource>(
+      `
+    SELECT r.id, r.resource_type_id, r.name, 
+           r.description, r.floor, r.capacity, 
+           rt.booking_mode
+          FROM resources AS r
+      JOIN resource_types AS rt ON rt.id = r.resource_type_id
+        WHERE r.id = $1
   `,
-    [id_resource],
-  );
+      [resource_id],
+    );
 
-  return result.rows[0];
-}
+    return result.rows[0];
+  }
 
-export async function insertResource(resource: ResourceCreateBody) {
-  const result = await pool.query(
-    `
+  async findForUpdate(resource_id: number): Promise<Resource | undefined> {
+    const result = await this.db.query<Resource>(
+      `
+    SELECT r.id, r.resource_type_id, r.name, 
+           r.description, r.floor, r.capacity, 
+           rt.booking_mode
+          FROM resources AS r
+      JOIN resource_types AS rt ON rt.id = r.resource_type_id
+        WHERE r.id = $1
+        FOR UPDATE OF r
+  `,
+      [resource_id],
+    );
+
+    return result.rows[0];
+  }
+
+  async insert(resource: ResourceCreateBody) {
+    await this.db.query(
+      `
     INSERT INTO resources(resource_type_id, name, description, floor, capacity)
 	         VALUES ($1, $2, $3, $4, $5);
   `,
-    [
-      resource.resource_type_id,
-      resource.name,
-      resource.description,
-      resource.floor,
-      resource.capacity,
-    ],
-  );
+      [
+        resource.resource_type_id,
+        resource.name,
+        resource.description,
+        resource.floor,
+        resource.capacity,
+      ],
+    );
+  }
 
-  return result.rows;
-}
-
-export async function updateResource(
-  id_resource: number,
-  resource: ResourceUpdateBody,
-) {
-  const result = await pool.query(
-    `
+  async update(resource_id: string, resource: ResourceUpdateBody) {
+    await this.db.query(
+      `
     UPDATE resources
 	       SET resource_type_id = COALESCE($1, resource_type_id),
              name             = COALESCE($2, name),
@@ -77,26 +96,23 @@ export async function updateResource(
              capacity         = COALESCE($5, capacity)
 	     WHERE id=$6
   `,
-    [
-      resource.resource_type_id,
-      resource.name,
-      resource.description,
-      resource.floor,
-      resource.capacity,
-      id_resource,
-    ],
-  );
+      [
+        resource.resource_type_id,
+        resource.name,
+        resource.description,
+        resource.floor,
+        resource.capacity,
+        resource_id,
+      ],
+    );
+  }
 
-  return result.rows;
-}
-
-export async function deleteResource(id_resource: number) {
-  const result = await pool.query(
-    `
+  async delete(resource_id: string) {
+    await this.db.query(
+      `
     DELETE FROM resources WHERE id=$1
   `,
-    [id_resource],
-  );
-
-  return result.rows;
+      [resource_id],
+    );
+  }
 }

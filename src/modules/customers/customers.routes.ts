@@ -8,12 +8,18 @@ import {
 } from "../../shared/http/routing/registers.routing.js";
 
 export const customersRouter = Router();
+export const publicCustomersRouter = Router();
 
 const controller = new CustomersController();
 
 Get(customersRouter, "/customers", controller, controller.listCustomers);
 
-Post(customersRouter, "/customers", controller, controller.createCustomer);
+Post(
+  publicCustomersRouter,
+  "/customers",
+  controller,
+  controller.createCustomer,
+);
 
 Patch(
   customersRouter,

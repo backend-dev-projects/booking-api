@@ -1,18 +1,17 @@
-import type { ConstraintErrorKey } from "../../../db/errors.js";
-import type { ConstraintError } from "../../../shared/http/errors/error.type.js";
+import type { ConstraintErrorKey } from "../../../db/postgres/errors.js";
+import type { ErrorResponse } from "../../../shared/http/errors/error-response.js";
 
-export const customerWriteErrors = new Map<ConstraintErrorKey, ConstraintError>(
+export const customerWriteErrors = new Map<ConstraintErrorKey, ErrorResponse>([
   [
-    [
-      "23505:users_email_key",
-      {
-        status: 409,
-        issue: {
+    "23505:users_email_key",
+    {
+      status: 409,
+      issues: [
+        {
           path: ["body", "email"],
-          code: "email_taken",
           message: "A customer with this email already exists.",
         },
-      },
-    ],
+      ],
+    },
   ],
-);
+]);

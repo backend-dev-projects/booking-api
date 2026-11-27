@@ -1,19 +1,18 @@
-import type { ConstraintErrorKey } from "../../../db/errors.js";
-import type { ConstraintError } from "../../../shared/http/errors/error.type.js";
+import type { ConstraintErrorKey } from "../../../db/postgres/errors.js";
+import type { ErrorResponse } from "../../../shared/http/errors/error-response.js";
 
-export const resourceDeleteErrors = new Map<
-  ConstraintErrorKey,
-  ConstraintError
->([
+export const resourceDeleteErrors = new Map<ConstraintErrorKey, ErrorResponse>([
   [
     "23503:reservations_resource_id_fkey",
     {
       status: 409,
-      issue: {
-        path: ["params", "id_resource"],
-        code: "resource_has_reservations",
-        message: "This resource is still referenced by existing reservations.",
-      },
+      issues: [
+        {
+          path: ["params", "id_resource"],
+          message:
+            "This resource is still referenced by existing reservations.",
+        },
+      ],
     },
   ],
 ]);

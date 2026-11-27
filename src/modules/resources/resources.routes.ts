@@ -17,14 +17,14 @@ Post(resourcesRouter, "/resources", controller, controller.createResource);
 
 Patch(
   resourcesRouter,
-  "/resources/:id_resource",
+  "/resources/:resource_id",
   controller,
   controller.updateResource,
 );
 
 Delete(
   resourcesRouter,
-  "/resources/:id_resource",
+  "/resources/:resource_id",
   controller,
   controller.deleteResource,
 );

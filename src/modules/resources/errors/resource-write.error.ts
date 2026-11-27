@@ -1,29 +1,29 @@
-import type { ConstraintErrorKey } from "../../../db/errors.js";
-import type { ConstraintError } from "../../../shared/http/errors/error.type.js";
+import type { ConstraintErrorKey } from "../../../db/postgres/errors.js";
+import type { ErrorResponse } from "../../../shared/http/errors/error-response.js";
 
-export const resourceWriteErrors = new Map<ConstraintErrorKey, ConstraintError>(
+export const resourceWriteErrors = new Map<ConstraintErrorKey, ErrorResponse>([
   [
-    [
-      "23505:uq_resources_name",
-      {
-        status: 409,
-        issue: {
+    "23505:uq_resources_name",
+    {
+      status: 409,
+      issues: [
+        {
           path: ["body", "name"],
-          code: "resource_name_taken",
           message: "A resource with this name already exists.",
         },
-      },
-    ],
-    [
-      "23503:resources_resource_type_id_fkey",
-      {
-        status: 422,
-        issue: {
+      ],
+    },
+  ],
+  [
+    "23503:resources_resource_type_id_fkey",
+    {
+      status: 422,
+      issues: [
+        {
           path: ["body", "resource_type_id"],
-          code: "resource_type_id_not_found",
           message: "Resource type id is not found.",
         },
-      },
-    ],
+      ],
+    },
   ],
-);
+]);
