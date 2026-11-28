@@ -1,7 +1,7 @@
-import type { DbClient } from "../../../db/db-client.js";
-import { database } from "../../../db/index.js";
-import type { UserCredentials } from "../domain/auth.model.js";
-import type { AuthRepositoryPort } from "../application/ports/auth-repository.port.js";
+import type { DbClient } from "../../../../db/db-client.js";
+import { database } from "../../../../db/index.js";
+import type { UserCredentials } from "../../domain/user-credentials.model.js";
+import type { AuthRepositoryPort } from "../../application/ports/auth-repository.port.js";
 
 export class PostgresAuthRepository implements AuthRepositoryPort {
   constructor(private readonly db: DbClient = database) {}

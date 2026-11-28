@@ -1,6 +1,5 @@
 import type { Request, Response } from "express";
 import { promisify } from "node:util";
-import { requireAuth } from "./middlewares/require-auth.middleware.js";
 import {
   sessionCookieName,
   sessionCookieOptions,

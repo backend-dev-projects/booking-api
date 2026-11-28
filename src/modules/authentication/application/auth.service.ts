@@ -1,17 +1,24 @@
 import type { AuthRepositoryPort } from "./ports/auth-repository.port.js";
-import type { UserCredentials } from "../domain/auth.model.js";
-import { ApplicationError } from "../../../shared/presentation/errors/application-error.js";
+import type { PasswordVerifierPort } from "./ports/password-verifier.port.js";
+import { ApplicationError } from "../../../shared/application/errors/application-error.js";
+import type { AuthenticatedUser } from "../domain/authenticated-user.model.js";
 
 export class AuthService {
-  constructor(private readonly authRepository: AuthRepositoryPort) {}
+  constructor(
+    private readonly authRepository: AuthRepositoryPort,
+    private readonly passwordVerifier: PasswordVerifierPort,
+  ) {}
 
-  async login(email: string, password: string): Promise<UserCredentials> {
+  async login(email: string, password: string): Promise<AuthenticatedUser> {
     const user = await this.authRepository.findUserForLogin(email);
 
     if (!user)
       throw new ApplicationError(401, "Invalid email.", ["body", "email"]);
 
-    const passwordMatches = await user.verifyPassword(password);
+    const passwordMatches = await this.passwordVerifier.verify(
+      user.password_hash,
+      password,
+    );
 
     if (!passwordMatches)
       throw new ApplicationError(401, "Invalid password.", [
@@ -19,6 +26,9 @@ export class AuthService {
         "password",
       ]);
 
-    return user;
+    return {
+      id: user.id,
+      role: user.role,
+    };
   }
 }

@@ -1,16 +1,7 @@
-import connectPgSimple from "connect-pg-simple";
-import session from "express-session";
-import type { Role } from "../../domain/enums/roles.enum.js";
-import { pool } from "../../../../db/postgres/pool.js";
-
-declare module "express-session" {
-  interface SessionData {
-    user_id?: string;
-    role?: Role;
-  }
-}
+import session, { type Store } from "express-session";
 
 export const sessionCookieName = "booking.sid";
+
 export const sessionCookieOptions = {
   httpOnly: true,
   path: "/",
@@ -18,15 +9,16 @@ export const sessionCookieOptions = {
   secure: process.env.NODE_ENV === "production",
 } as const;
 
-const PgSessionStore = connectPgSimple(session);
-
-export function createSessionMiddleware() {
+export function createSessionMiddleware(store: Store) {
   const secret = process.env.SESSION_SECRET;
-  if (!secret) throw new Error("SESSION_SECRET is required");
+
+  if (!secret) {
+    throw new Error("SESSION_SECRET is required");
+  }
 
   return session({
     name: sessionCookieName,
-    store: new PgSessionStore({ pool }),
+    store,
     secret,
     resave: false,
     saveUninitialized: false,
