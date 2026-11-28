@@ -1,6 +1,6 @@
 import { database } from "../../db/index.js";
 import type { Database } from "../../db/db-client.js";
-import { HttpError } from "../../shared/http/errors/http-error.js";
+import { HttpError } from "../../shared/presentation/errors/application-error.js";
 import { BookingMode } from "../resources/enums/booking-mode.enum.js";
 import { findPeakOccupancy } from "./availability/find-peak-occupancy.js";
 import { ReservationsRepository } from "./reservations.repository.js";

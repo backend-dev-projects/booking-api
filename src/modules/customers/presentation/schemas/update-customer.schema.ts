@@ -1,6 +1,6 @@
 import * as z from "zod";
 import { customerIdParamsSchema } from "./input-customer.schema.js";
-import { requireUpdateFields } from "../../../shared/validations/schemas/require-update-fields.schema.js";
+import { requireUpdateFields } from "../../../../shared/presentation/schemas/require-update-fields.schema.js";
 
 const customerUpdateBodySchema = z
   .object({

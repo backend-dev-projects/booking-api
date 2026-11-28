@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { UseMiddleware } from "../../shared/http/routing/registers.routing.js";
-import { validateRequest } from "../../shared/http/middleware/validate-request.middleware.js";
+import { validateRequest } from "../../shared/presentation/middleware/validate-request.middleware.js";
 import { reservationCreateRequestSchema } from "./schemas/create-reservation.schema.js";
 import { ReservationService } from "./reservations.service.js";
 

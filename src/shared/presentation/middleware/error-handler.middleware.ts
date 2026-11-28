@@ -1,7 +1,7 @@
 import type { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
-import { HttpError } from "../errors/http-error.js";
-import type { ErrorResponse } from "../errors/error-response.js";
+import { ApplicationError } from "../errors/application-error.js";
+import type { ErrorResponse } from "../errors/response-error.js";
 
 export const errorHandler: ErrorRequestHandler = (
   error: unknown,
@@ -30,7 +30,7 @@ export const errorHandler: ErrorRequestHandler = (
   }
 
   // Application errors
-  if (error instanceof HttpError) {
+  if (error instanceof ApplicationError) {
     const response: ErrorResponse = {
       status: error.status,
       issues: [

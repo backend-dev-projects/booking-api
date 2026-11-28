@@ -1,8 +1,7 @@
 import type { Request, Response } from "express";
 import { promisify } from "node:util";
-import * as argon2 from "argon2";
 import { UseMiddleware } from "../../shared/http/routing/registers.routing.js";
-import { validateRequest } from "../../shared/http/middleware/validate-request.middleware.js";
+import { validateRequest } from "../../shared/presentation/middleware/validate-request.middleware.js";
 import { requireAuth } from "./middlewares/require-auth.middleware.js";
 import {
   sessionCookieName,
@@ -22,7 +21,7 @@ export class AuthController {
 
     await promisify(req.session.regenerate).call(req.session);
 
-    req.session.userId = user.id;
+    req.session.user_id = user.id;
     req.session.role = user.role;
 
     await promisify(req.session.save).call(req.session);
@@ -32,7 +31,7 @@ export class AuthController {
 
   @UseMiddleware(requireAuth)
   getCurrentSession(req: Request, res: Response): void {
-    res.json({ id: req.session.userId });
+    res.json({ id: req.session.user_id });
   }
 
   async logout(req: Request, res: Response): Promise<void> {

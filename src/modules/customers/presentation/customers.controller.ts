@@ -1,15 +1,9 @@
 import type { Request, Response } from "express";
 import * as argon2 from "argon2";
-import { CustomersService } from "./customers.service.js";
-import { UseMiddleware } from "../../shared/http/routing/registers.routing.js";
-import { validateRequest } from "../../shared/http/middleware/validate-request.middleware.js";
-import { createResourcesRequestSchema } from "./schemas/create-customer.schema.js";
-import { updateCustomerRequestSchema } from "./schemas/update-customer.schema.js";
-import { deleteCustomerRequestSchema } from "./schemas/delete-customer.schema.js";
-import { requireAuthChanges } from "./middleware/auth-changes.middleware.js";
+import { CustomerService } from "../application/customers.service.js";
 
-export class CustomersController {
-  constructor(private readonly customerService = new CustomersService()) {}
+export class CustomerController {
+  constructor(private readonly customerService: CustomerService) {}
 
   async listCustomers(_req: Request, res: Response): Promise<void> {
     const customers = await this.customerService.findAll();
@@ -17,7 +11,6 @@ export class CustomersController {
     res.json(customers);
   }
 
-  @UseMiddleware(validateRequest(createResourcesRequestSchema))
   async createCustomer(_req: Request, res: Response): Promise<void> {
     const { full_name, email, password } = res.locals.input.body;
     const password_hash = await argon2.hash(password);
@@ -27,10 +20,6 @@ export class CustomersController {
     res.status(201).end();
   }
 
-  @UseMiddleware(
-    validateRequest(updateCustomerRequestSchema),
-    requireAuthChanges,
-  )
   async updateCustomer(_req: Request, res: Response): Promise<void> {
     _req.session;
     const { id_customer: id_customer } = res.locals.input.params;
@@ -45,10 +34,6 @@ export class CustomersController {
     res.status(204).end();
   }
 
-  @UseMiddleware(
-    validateRequest(deleteCustomerRequestSchema),
-    requireAuthChanges,
-  )
   async deleteCustomer(_req: Request, res: Response): Promise<void> {
     const { id_customer: id_customer } = res.locals.input.params;
 

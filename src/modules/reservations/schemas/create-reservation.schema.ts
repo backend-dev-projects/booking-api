@@ -1,6 +1,6 @@
 import * as z from "zod";
-import { positiveInt32Schema } from "../../../shared/validations/schemas/positive-integer.schema.js";
-import { dateTimeSchema } from "../../../shared/validations/schemas/date-time.schema.js";
+import { positiveInt32Schema } from "../../../shared/presentation/schemas/positive-integer.schema.js";
+import { dateTimeSchema } from "../../../shared/presentation/schemas/date-time.schema.js";
 import {
   hasValidInterval,
   isWithinBookingHorizon,

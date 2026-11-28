@@ -1,10 +1,10 @@
 import express from "express";
-import { errorHandler } from "./shared/http/middleware/error-handler.middleware.js";
+import { errorHandler } from "./shared/presentation/middleware/error-handler.middleware.js";
 import { resourcesRouter } from "./modules/resources/resources.routes.js";
 import {
   customersRouter,
   publicCustomersRouter,
-} from "./modules/customers/customers.routes.js";
+} from "./modules/customers/presentation/customers.routes.js";
 import { reservationsRouter } from "./modules/reservations/reservations.routes.js";
 
 import {

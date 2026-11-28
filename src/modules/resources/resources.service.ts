@@ -3,7 +3,7 @@ import { ResourcesRepository } from "./resources.repository.js";
 import type { Resource } from "./resources.types.js";
 import { resourceWriteErrors } from "./errors/resource-write.error.js";
 import { resourceDeleteErrors } from "./errors/resource-delete.error.js";
-import { HttpError } from "../../shared/http/errors/http-error.js";
+import { HttpError } from "../../shared/presentation/errors/application-error.js";
 import type { ResourceCreateBody } from "./schemas/create-resource.schema.js";
 import type { ResourceUpdateBody } from "./schemas/update-resource.schema.js";
 

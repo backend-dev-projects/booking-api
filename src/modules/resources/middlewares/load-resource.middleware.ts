@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
 import { ResourcesRepository } from "../resources.repository.js";
-import { HttpError } from "../../../shared/http/errors/http-error.js";
+import { HttpError } from "../../../shared/presentation/errors/application-error.js";
 
 const resourceRepository = new ResourcesRepository();
 

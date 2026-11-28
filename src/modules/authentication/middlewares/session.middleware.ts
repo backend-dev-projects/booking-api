@@ -5,7 +5,7 @@ import { pool } from "../../../db/postgres/pool.js";
 
 declare module "express-session" {
   interface SessionData {
-    userId?: string;
+    user_id?: string;
     role?: Role;
   }
 }

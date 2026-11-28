@@ -1,8 +1,8 @@
 import { AuthRepository } from "./auth.repository.js";
 import * as argon2 from "argon2";
 import { randomBytes } from "node:crypto";
-import { HttpError } from "../../shared/http/errors/http-error.js";
 import type { UserCredentials } from "./auth.types.js";
+import { ApplicationError } from "../../shared/presentation/errors/application-error.js";
 
 const fallbackHash = await argon2.hash(randomBytes(32).toString("hex"));
 
@@ -17,7 +17,10 @@ export class AuthService {
     );
 
     if (!user || !passwordMatches)
-      throw new HttpError(401, "Invalid email or password.", ["body", "email"]);
+      throw new ApplicationError(401, "Invalid email or password.", [
+        "body",
+        "email",
+      ]);
 
     return user;
   }

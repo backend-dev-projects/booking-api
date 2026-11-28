@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { listResourcesRequestSchema } from "./schemas/list-resources.schema.js";
-import { validateRequest } from "../../shared/http/middleware/validate-request.middleware.js";
+import { validateRequest } from "../../shared/presentation/middleware/validate-request.middleware.js";
 import { UseMiddleware } from "../../shared/http/routing/registers.routing.js";
 import { createResourcesRequestSchema } from "./schemas/create-resource.schema.js";
 import { lookupConstraintError } from "../../db/postgres/errors.js";
@@ -9,7 +9,7 @@ import { updateResourceRequestSchema } from "./schemas/update-resource.schema.js
 import { resourceDeleteErrors } from "./errors/resource-delete.error.js";
 import { deleteResourceRequestSchema } from "./schemas/delete-resource.schema.js";
 import { loadResource } from "./middlewares/load-resource.middleware.js";
-import { HttpError } from "../../shared/http/errors/http-error.js";
+import { HttpError } from "../../shared/presentation/errors/application-error.js";
 import { ResourcesService } from "./resources.service.js";
 
 export class ResourcesController {
