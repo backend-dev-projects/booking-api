@@ -1,6 +1,6 @@
 import express from "express";
 import { errorHandler } from "./shared/presentation/middleware/error-handler.middleware.js";
-import { resourcesRouter } from "./modules/resources/resources.routes.js";
+import { resourcesRouter } from "./modules/resources/presentation/resources.routes.js";
 import {
   customersRouter,
   publicCustomersRouter,

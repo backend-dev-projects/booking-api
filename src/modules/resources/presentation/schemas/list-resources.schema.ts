@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { positiveInt32Schema } from "../../../shared/presentation/schemas/positive-integer.schema.js";
+import { positiveInt32Schema } from "../../../../shared/presentation/schemas/positive-integer.schema.js";
 
 const resourceFiltersSchema = z.object({
   resource_type_id: z.coerce.number().pipe(positiveInt32Schema).optional(),

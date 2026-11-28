@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { resourceIdParamsSchema } from "./input-resource.schema.js";
-import { positiveInt32Schema } from "../../../shared/presentation/schemas/positive-integer.schema.js";
-import { requireUpdateFields } from "../../../shared/presentation/schemas/require-update-fields.schema.js";
+import { positiveInt32Schema } from "../../../../shared/presentation/schemas/positive-integer.schema.js";
+import { requireUpdateFields } from "../../../../shared/presentation/schemas/require-update-fields.schema.js";
 
 const resourceUpdateBodySchema = z
   .object({

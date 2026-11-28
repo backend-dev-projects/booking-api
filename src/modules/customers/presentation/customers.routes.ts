@@ -24,14 +24,14 @@ export function registerPrivateCustomerRouter(controller: CustomerController) {
   router.get("/customers", controller.listCustomers);
 
   router.patch(
-    "/customers/:id_customer",
+    "/customers/:customer_id",
     validateRequest(updateCustomerRequestSchema),
     requireAuthChanges,
     controller.updateCustomer,
   );
 
   router.delete(
-    "/customers/:id_customer",
+    "/customers/:customer_id",
     validateRequest(deleteCustomerRequestSchema),
     requireAuthChanges,
     controller.deleteCustomer,

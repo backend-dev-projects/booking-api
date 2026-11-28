@@ -1,7 +1,7 @@
-import type { ConstraintErrorKey } from "../../../db/postgres/errors.js";
-import type { ErrorResponse } from "../../../shared/http/errors/error-response.js";
+import type { ConstraintErrorKey } from "../../../../db/postgres/errors.js";
+import type { PostgreError } from "../../../../shared/presentation/errors/postgres-error.js";
 
-export const resourceWriteErrors = new Map<ConstraintErrorKey, ErrorResponse>([
+export const resourceWriteErrors = new Map<ConstraintErrorKey, PostgreError>([
   [
     "23505:uq_resources_name",
     {

@@ -2,7 +2,7 @@ import type { DbClient } from "../../../db/db-client.js";
 import { database } from "../../../db/index.js";
 import { lookupConstraintError } from "../../../db/postgres/errors.js";
 import { ApplicationError } from "../../../shared/presentation/errors/application-error.js";
-import type { CustomerRepositoryPort } from "../application/ports/customer-repository.port.js";
+import type { CustomerRepositoryPort } from "../application/ports/customers-repository.port.js";
 import type { Customer } from "../domain/customer.model.js";
 import { customerDeleteErrors } from "./postgres-errors/customer-delete.error.js";
 import { customerWriteErrors } from "./postgres-errors/customer-write.error.js";
