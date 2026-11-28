@@ -8,7 +8,7 @@ export const customerDeleteErrors = new Map<ConstraintErrorKey, PostgreError>([
       status: 409,
       issues: [
         {
-          path: ["params", "id_customer"],
+          path: ["params", "customer_id"],
           message: "This user is still referenced by existing reservations.",
         },
       ],

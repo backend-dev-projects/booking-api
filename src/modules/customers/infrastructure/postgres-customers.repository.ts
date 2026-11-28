@@ -22,14 +22,14 @@ export class PostgresCustomerRepository implements CustomerRepositoryPort {
     return result.rows;
   }
 
-  async findById(id_customer: string): Promise<Customer | undefined> {
+  async findById(customer_id: string): Promise<Customer | undefined> {
     const result = await this.db.query<Customer>(
       `
       SELECT id, full_name, email
 	      FROM users
        WHERE id=$1
     `,
-      [id_customer],
+      [customer_id],
     );
 
     return result.rows[0];
@@ -64,7 +64,7 @@ export class PostgresCustomerRepository implements CustomerRepositoryPort {
   }
 
   async update(
-    id_customer: string,
+    customer_id: string,
     full_name: string | undefined,
     password_hash: string | undefined,
   ): Promise<void> {
@@ -76,7 +76,7 @@ export class PostgresCustomerRepository implements CustomerRepositoryPort {
              password_hash = COALESCE($2, password_hash)
 	     WHERE id=$3
   `,
-        [full_name, password_hash, id_customer],
+        [full_name, password_hash, customer_id],
       );
     } catch (error) {
       const response = lookupConstraintError(error, customerWriteErrors);
@@ -93,13 +93,13 @@ export class PostgresCustomerRepository implements CustomerRepositoryPort {
     }
   }
 
-  async delete(id_customer: string): Promise<void> {
+  async delete(customer_id: string): Promise<void> {
     try {
       await this.db.query(
         `
         DELETE FROM users WHERE id=$1
         `,
-        [id_customer],
+        [customer_id],
       );
     } catch (error: unknown) {
       const response = lookupConstraintError(error, customerDeleteErrors);

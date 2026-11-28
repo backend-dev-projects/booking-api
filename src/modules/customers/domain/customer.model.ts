@@ -1,5 +1,14 @@
-export interface Customer {
-  id: string;
-  full_name: string;
-  email: string;
+import { Role } from "../../authentication/enums/roles.enum.js";
+
+export class Customer {
+  constructor(
+    public customer_id: string,
+    public full_name: string,
+    public user_role: Role,
+    public email: string,
+  ) {}
+
+  canUpdateUser(user_id: string) {
+    return this.user_role === Role.ADMIN || user_id === this.customer_id;
+  }
 }

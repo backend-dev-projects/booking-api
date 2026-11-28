@@ -22,24 +22,24 @@ export class CustomerController {
 
   async updateCustomer(_req: Request, res: Response): Promise<void> {
     _req.session;
-    const { id_customer: id_customer } = res.locals.input.params;
+    const { customer_id } = res.locals.input.params;
     const { full_name, password } = res.locals.input.body;
     const password_hash =
       password === undefined ? undefined : await argon2.hash(password);
 
-    await this.customerService.find(id_customer);
+    await this.customerService.find(customer_id);
 
-    await this.customerService.update(id_customer, full_name, password_hash);
+    await this.customerService.update(customer_id, full_name, password_hash);
 
     res.status(204).end();
   }
 
   async deleteCustomer(_req: Request, res: Response): Promise<void> {
-    const { id_customer: id_customer } = res.locals.input.params;
+    const { customer_id } = res.locals.input.params;
 
-    await this.customerService.find(id_customer);
+    await this.customerService.find(customer_id);
 
-    await this.customerService.delete(id_customer);
+    await this.customerService.delete(customer_id);
 
     res.status(204).end();
   }
