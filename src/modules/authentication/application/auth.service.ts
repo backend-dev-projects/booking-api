@@ -13,7 +13,7 @@ export class AuthService {
     const user = await this.authRepository.findUserForLogin(email);
 
     if (!user)
-      throw new ApplicationError(401, "Invalid email.", ["body", "email"]);
+      throw new ApplicationError(401, "Invalid email or password.", ["email"]);
 
     const passwordMatches = await this.passwordVerifier.verify(
       user.password_hash,
@@ -21,10 +21,7 @@ export class AuthService {
     );
 
     if (!passwordMatches)
-      throw new ApplicationError(401, "Invalid password.", [
-        "body",
-        "password",
-      ]);
+      throw new ApplicationError(401, "Invalid email or password.", ["email"]);
 
     return {
       id: user.id,
