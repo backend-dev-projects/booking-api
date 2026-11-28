@@ -1,13 +1,13 @@
 import * as z from "zod";
-import { positiveInt32Schema } from "../../../shared/presentation/schemas/positive-integer.schema.js";
-import { dateTimeSchema } from "../../../shared/presentation/schemas/date-time.schema.js";
 import {
   hasValidInterval,
   isWithinBookingHorizon,
   isWithinWorkingDays,
   isWithinWorkingHour,
   startsInFuture,
-} from "../validation/reservation-date-rules.js";
+} from "./validation/reservation-date-rules.js";
+import { dateTimeSchema } from "../../../../shared/presentation/schemas/date-time.schema.js";
+import { positiveInt32Schema } from "../../../../shared/presentation/schemas/positive-integer.schema.js";
 
 const reservationCreateBodySchema = z
   .object({

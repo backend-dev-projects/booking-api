@@ -1,8 +1,8 @@
 import type { Resource } from "../domain/resource.model.js";
-import type { ResourcesRepositoryPort } from "./ports/resources-repository.port.js";
+import type { ResourceRepositoryPort } from "./ports/resources-repository.port.js";
 
-export class ResourcesService {
-  constructor(private readonly resourcesRepository: ResourcesRepositoryPort) {}
+export class ResourceService {
+  constructor(private readonly resourcesRepository: ResourceRepositoryPort) {}
 
   async findAll(
     resource_type_id?: number,

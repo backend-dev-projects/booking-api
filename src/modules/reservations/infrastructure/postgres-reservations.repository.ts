@@ -1,8 +1,9 @@
-import type { DbClient } from "../../db/db-client.js";
-import { database } from "../../db/index.js";
-import type { Reservation } from "./reservations.types.js";
+import type { DbClient } from "../../../db/db-client.js";
+import { database } from "../../../db/index.js";
+import type { Reservation } from "../domain/reservations.model.js";
+import type { ReservationRepositoryPort } from "../application/ports/reservations-repository.port.js";
 
-export class ReservationsRepository {
+export class PostgresReservationRepository implements ReservationRepositoryPort {
   constructor(private readonly db: DbClient = database) {}
 
   async findByStartTime(

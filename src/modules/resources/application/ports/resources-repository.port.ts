@@ -1,6 +1,6 @@
 import type { Resource } from "../../domain/resource.model.js";
 
-export interface ResourcesRepositoryPort {
+export interface ResourceRepositoryPort {
   filter(resource_type_id?: number, capacity?: number): Promise<Resource[]>;
   findById(resource_id: number): Promise<Resource | undefined>;
   findForUpdate(resource_id: number): Promise<Resource | undefined>;

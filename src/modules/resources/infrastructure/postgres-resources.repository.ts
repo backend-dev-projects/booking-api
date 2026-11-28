@@ -5,9 +5,9 @@ import { lookupConstraintError } from "../../../db/postgres/errors.js";
 import { resourceWriteErrors } from "./errors/resource-write.error.js";
 import { ApplicationError } from "../../../shared/presentation/errors/application-error.js";
 import { resourceDeleteErrors } from "./errors/resource-delete.error.js";
-import type { ResourcesRepositoryPort } from "../application/ports/resources-repository.port.js";
+import type { ResourceRepositoryPort } from "../application/ports/resources-repository.port.js";
 
-export class PostgresResourceRepository implements ResourcesRepositoryPort {
+export class PostgresResourceRepository implements ResourceRepositoryPort {
   constructor(private readonly db: DbClient = database) {}
 
   async filter(
