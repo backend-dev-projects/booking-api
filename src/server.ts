@@ -10,9 +10,9 @@ import { reservationsRouter } from "./modules/reservations/reservations.routes.j
 import {
   authRouter,
   publicAuthRouter,
-} from "./modules/authentication/auth.routes.js";
-import { createSessionMiddleware } from "./modules/authentication/middlewares/session.middleware.js";
-import { requireAuth } from "./modules/authentication/middlewares/require-auth.middleware.js";
+} from "./modules/authentication/presentation/auth.routes.js";
+import { createSessionMiddleware } from "./modules/authentication/presentation/middlewares/session.middleware.js";
+import { requireAuth } from "./modules/authentication/presentation/middlewares/require-auth.middleware.js";
 
 const prefix = "/api";
 const app = express();

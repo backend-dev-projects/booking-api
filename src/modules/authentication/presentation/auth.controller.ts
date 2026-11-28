@@ -1,21 +1,17 @@
 import type { Request, Response } from "express";
 import { promisify } from "node:util";
-import { UseMiddleware } from "../../shared/http/routing/registers.routing.js";
-import { validateRequest } from "../../shared/presentation/middleware/validate-request.middleware.js";
 import { requireAuth } from "./middlewares/require-auth.middleware.js";
 import {
   sessionCookieName,
   sessionCookieOptions,
 } from "./middlewares/session.middleware.js";
-import { loginRequestSchema, type LoginBody } from "./schemas/login.schema.js";
-import { AuthService } from "./auth.service.js";
+import type { AuthService } from "../application/auth.service.js";
 
 export class AuthController {
-  constructor(private readonly authService = new AuthService()) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @UseMiddleware(validateRequest(loginRequestSchema))
   async login(req: Request, res: Response): Promise<void> {
-    const { email, password }: LoginBody = res.locals.input.body;
+    const { email, password } = res.locals.input.body;
 
     const user = await this.authService.login(email, password);
 
@@ -29,7 +25,6 @@ export class AuthController {
     res.status(204).end();
   }
 
-  @UseMiddleware(requireAuth)
   getCurrentSession(req: Request, res: Response): void {
     res.json({ id: req.session.user_id });
   }

@@ -1,7 +1,7 @@
 import connectPgSimple from "connect-pg-simple";
 import session from "express-session";
-import type { Role } from "../enums/roles.enum.js";
-import { pool } from "../../../db/postgres/pool.js";
+import type { Role } from "../../domain/enums/roles.enum.js";
+import { pool } from "../../../../db/postgres/pool.js";
 
 declare module "express-session" {
   interface SessionData {

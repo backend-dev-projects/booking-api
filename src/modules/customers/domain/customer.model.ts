@@ -1,4 +1,4 @@
-import { Role } from "../../authentication/enums/roles.enum.js";
+import { Role } from "../../authentication/domain/enums/roles.enum.js";
 
 export class Customer {
   constructor(

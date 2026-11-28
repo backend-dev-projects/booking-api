@@ -1,14 +1,13 @@
 import type { DbClient } from "../../../db/db-client.js";
 import { database } from "../../../db/index.js";
 import type { Resource } from "../domain/resource.model.js";
-import type { ResourceFilters } from "../presentation/schemas/list-resources.schema.js";
 import { lookupConstraintError } from "../../../db/postgres/errors.js";
 import { resourceWriteErrors } from "./errors/resource-write.error.js";
 import { ApplicationError } from "../../../shared/presentation/errors/application-error.js";
 import { resourceDeleteErrors } from "./errors/resource-delete.error.js";
 import type { ResourcesRepositoryPort } from "../application/ports/resources-repository.port.js";
 
-export class ResourcesRepository implements ResourcesRepositoryPort {
+export class PostgresResourceRepository implements ResourcesRepositoryPort {
   constructor(private readonly db: DbClient = database) {}
 
   async filter(
